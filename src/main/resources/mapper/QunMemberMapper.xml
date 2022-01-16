@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mybatis.demo.mapper.QunMemberMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.mybatis.demo.entity.QunMember" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="update_transaction" property="updateTransaction" jdbcType="BIGINT" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="qun_id" property="qunId" jdbcType="BIGINT" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id,version,update_transaction,user_id,qun_id
+    </sql>
+
+    <insert id="insert" parameterType="com.example.mybatis.demo.entity.QunMember">
+        insert into qun_member_t (user_id,qun_id,version,update_transaction) values (#{userId},#{qunId},#{version},#{updateTransaction})
+    </insert>
+
+    <update id="updateVersion" parameterType="com.example.mybatis.demo.entity.QunMember" >
+        UPDATE `qun_member_t`
+        SET version = #{version},
+            update_transaction = #{updateTransaction}
+        WHERE id = #{id}
+    </update>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+         select
+          <include refid="Base_Column_List"/>
+         from qun_member_t
+         where id=#{id}
+    </select>
+    <select id="memberCount" resultType="java.lang.Integer">
+        select count(*) from qun_member_t where qun_id =#{qunId}
+    </select>
+
+</mapper>
