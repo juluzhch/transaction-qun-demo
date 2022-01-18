@@ -86,6 +86,42 @@ public class CurrentTest {
         }
     }
 
+
+    public void testDBVersionBack4InsertMember(){
+
+        //两个线程分别执行
+        CountDownLatch downLatch=new CountDownLatch(2);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(2);
+        log.info("testVersionBack4InsertMember 开始执行...");
+        Thread threadA=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                QunMember c =new QunMember();
+                c.setQunId(1);
+                c.setUserId(System.currentTimeMillis()+Utils.getThreadId());
+                insertMemberAndUpateQunDBVersion(c,0,0,10000,downLatch,cyclicBarrier);
+            }
+        });
+        Thread threadB=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //sleepBefore =10 ,保证比A晚开始执行
+                QunMember d =new QunMember();
+                d.setQunId(1);
+                d.setUserId(System.currentTimeMillis()+Utils.getThreadId());
+                insertMemberAndUpateQunDBVersion(d,0,1000,0,downLatch,cyclicBarrier);
+            }
+        });
+        threadA.start();
+        threadB.start();
+        try {
+            downLatch.await();
+            log.info("testVersionBack4InsertMember 执行完毕！");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     //测试群成员计数更新-幻读问题
     public void testMemberCount(){
 
@@ -223,4 +259,21 @@ public class CurrentTest {
         log.info(Utils.getThreadId()+"执行更新，完毕");
         downLatch.countDown();
     }
+
+    private void insertMemberAndUpateQunDBVersion(QunMember member, long middleSleepMillis, long sleepBefore, long sleepEnd, CountDownLatch downLatch, CyclicBarrier cyclicBarrier){
+        try {
+            cyclicBarrier.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+        Utils.sleep(sleepBefore);
+        log.info(Utils.getThreadId()+"开始执行，更新");
+        qunService.insertMemberAndUpdateQunUseDbVersion(member,middleSleepMillis,sleepEnd);
+        log.info(Utils.getThreadId()+"执行更新，完毕");
+        downLatch.countDown();
+    }
+
+
 }

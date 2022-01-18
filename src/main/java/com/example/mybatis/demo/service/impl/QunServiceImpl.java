@@ -146,6 +146,29 @@ public class QunServiceImpl  implements QunService {
         return 1;
     }
 
+    @Override
+    @Transactional(timeout = 50)
+    public void insertMemberAndUpdateQunUseDbVersion(QunMember member, long middleSleepMillis, long endSleepMillis) {
+//        long version =System.currentTimeMillis();
+        String updateTransaction=Utils.getThreadId();
+        Qun qun=qunMapper.selectById(member.getQunId());
+
+//        member.setVersion(version);
+        member.setUpdateTransaction(updateTransaction);
+        log.info("添加成员开始 member= {}",member);
+        qunMemberMapper.insertUserDBVersion(member);
+        log.info("添加成员完成 member= {}",member);
+
+        Utils.sleep(middleSleepMillis);
+
+//        qun.setVersion(version);
+        qun.setUpdateTransaction(updateTransaction);
+        log.info("更新群开始 qun= {}",qun);
+//        qunMapper.updateQunVersionUseDBVersion(qun);
+        Utils.sleep(endSleepMillis);
+        log.info("更新群完成 qun= {}",qun);
+    }
+
     private int updateQunMemberAndQunInner(long qunId, long memberId, long middleSleepMillis){
         long version =System.currentTimeMillis();
         String updateTransaction=Utils.getThreadId();

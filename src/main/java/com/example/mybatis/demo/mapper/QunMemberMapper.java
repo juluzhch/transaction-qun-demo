@@ -17,4 +17,6 @@ public interface QunMemberMapper {
     int updateVersion(QunMember qunMember);
 
     int memberCount(long qunId);
+
+    int insertUserDBVersion(QunMember qunMember);
 }

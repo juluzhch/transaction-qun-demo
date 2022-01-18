@@ -16,6 +16,9 @@
     <insert id="insert" parameterType="com.example.mybatis.demo.entity.QunMember">
         insert into qun_member_t (user_id,qun_id,version,update_transaction) values (#{userId},#{qunId},#{version},#{updateTransaction})
     </insert>
+    <insert id="insertUserDBVersion" parameterType="com.example.mybatis.demo.entity.QunMember">
+        insert into qun_member_t (user_id,qun_id,version,update_transaction) values (#{userId},#{qunId},ROUND(UNIX_TIMESTAMP(NOW(3))*1000),#{updateTransaction})
+    </insert>
 
     <update id="updateVersion" parameterType="com.example.mybatis.demo.entity.QunMember" >
         UPDATE `qun_member_t`

@@ -46,4 +46,8 @@ public class TestCurrent {
         }
     }
 
+    @GetMapping("/dbversion")
+    public void dbVersion(){
+        currentTest.testDBVersionBack4InsertMember();
+    }
 }

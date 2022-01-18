@@ -35,6 +35,12 @@
             member_count=#{memberCount}
         WHERE id = #{id}
     </update>
+    <update id="updateQunVersionUseDBVersion" parameterType="com.example.mybatis.demo.entity.Qun">
+        UPDATE `qun_t`
+        SET version = ROUND(UNIX_TIMESTAMP(NOW(3))*1000),
+            update_transaction = #{updateTransaction}
+        WHERE id = #{id}
+    </update>
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
          select
           <include refid="Base_Column_List"/>

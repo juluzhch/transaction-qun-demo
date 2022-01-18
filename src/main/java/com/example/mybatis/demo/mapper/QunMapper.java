@@ -24,6 +24,8 @@ public interface QunMapper {
 
     int updateQunMemberCount(Qun qun);
 
+    int updateQunVersionUseDBVersion(Qun qun);
+
 //    #{name},#{memberCount},#{version},,#{updateTransaction}
 //    int insert(String name,int memberCount,long version,String updateTransaction);
 

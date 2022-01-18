@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class Helloword {
 
-//    @GetMapping("/{userName}")
-//    public String hello(@PathVariable String userName) {
-//        return "hello" +userName;
-//    }
+    @GetMapping("/{userName}")
+    public String hello(@PathVariable String userName) {
+        return "hello" +userName;
+    }
 
     @GetMapping("/zhongwen")
     public String zhongwen(@RequestHeader(name = "zhongwen") String account,HttpServletRequest request) throws UnsupportedEncodingException {

@@ -25,4 +25,7 @@ public interface QunService {
     void updateQunMemberCount(long qunId,long middleSleepMillis);
 
     int updateQunAndQunMember(long qunId,long memberId, long middleSleepMillis);
+
+
+    void insertMemberAndUpdateQunUseDbVersion(QunMember qunMember, long middleSleepMillis,long endSleepMillis);
 }
